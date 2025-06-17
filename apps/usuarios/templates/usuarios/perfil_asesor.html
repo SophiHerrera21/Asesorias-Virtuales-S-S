@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Perfil Asesor | S&S Asesorías Virtuales{% endblock %}
+{% block content %}
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <img src="{% static 'img/logo_ss.png' %}" alt="Logo S&S" class="logo">
+    </div>
+    <ul class="sidebar-nav">
+        <li><a href="{% url 'usuarios:dashboard_asesor' %}" class="sidebar-link"><i class="fas fa-home sidebar-icon"></i><span class="sidebar-label">Inicio</span></a></li>
+        <li><a href="{% url 'usuarios:perfil_asesor' %}" class="sidebar-link active"><i class="fas fa-user sidebar-icon"></i><span class="sidebar-label">Perfil</span></a></li>
+        <li><a href="{% url 'usuarios:componentes_asesor' %}" class="sidebar-link"><i class="fas fa-puzzle-piece sidebar-icon"></i><span class="sidebar-label">Componentes</span></a></li>
+        <li><a href="{% url 'usuarios:grupos_asesor' %}" class="sidebar-link"><i class="fas fa-users sidebar-icon"></i><span class="sidebar-label">Grupos</span></a></li>
+        <li><a href="{% url 'usuarios:pruebas_asesor' %}" class="sidebar-link"><i class="fas fa-file-alt sidebar-icon"></i><span class="sidebar-label">Pruebas</span></a></li>
+        <li><a href="{% url 'usuarios:pqrs_asesor' %}" class="sidebar-link"><i class="fas fa-question-circle sidebar-icon"></i><span class="sidebar-label">PQRS</span></a></li>
+        <li><a href="{% url 'usuarios:notificaciones_asesor' %}" class="sidebar-link"><i class="fas fa-bell sidebar-icon"></i><span class="sidebar-label">Notificaciones</span></a></li>
+        <li><a href="{% url 'usuarios:reportes_asesor' %}" class="sidebar-link"><i class="fas fa-chart-bar sidebar-icon"></i><span class="sidebar-label">Reportes</span></a></li>
+    </ul>
+    <div class="sidebar-footer">
+        <a href="{% url 'usuarios:logout' %}" class="sidebar-link"><i class="fas fa-sign-out-alt sidebar-icon"></i><span class="sidebar-label">Cerrar sesión</span></a>
+    </div>
+</div>
+<div class="main-content">
+    <h2 class="mb-4" style="color:#1e3a8a; font-family:'Playfair Display',serif; font-style:italic;">Mi Perfil</h2>
+    <div class="container py-4 animate__animated animate__fadeIn">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card p-4 mb-4 shadow-sm">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="me-4">
+                            {% if user.imagen_perfil %}
+                                <img src="{{ user.imagen_perfil.url }}" alt="Foto de perfil" class="rounded-circle border" style="width:120px; height:120px; object-fit:cover;">
+                            {% else %}
+                                <i class="fas fa-user-circle fa-7x text-secondary"></i>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h2 class="mb-1">{{ user.get_full_name }}</h2>
+                            <p class="mb-1 text-muted">{{ user.email }}</p>
+                            <p class="mb-1"><b>Teléfono:</b> {{ user.telefono }}</p>
+                            <p class="mb-1"><b>Especialidad:</b> {{ user.asesor.especialidad }}</p>
+                            <p class="mb-1"><b>Experiencia:</b> {{ user.asesor.experiencia }} años</p>
+                        </div>
+                    </div>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="first_name" class="form-label">Nombre</label>
+                                {{ form.first_name|add_class:'form-control' }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="last_name" class="form-label">Apellidos</label>
+                                {{ form.last_name|add_class:'form-control' }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Correo electrónico</label>
+                                {{ form.email|add_class:'form-control' }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="telefono" class="form-label">Teléfono</label>
+                                {{ form.telefono|add_class:'form-control' }}
+                            </div>
+                            <div class="col-md-12">
+                                <label for="direccion" class="form-label">Dirección</label>
+                                {{ form.direccion|add_class:'form-control' }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="imagen_perfil" class="form-label">Foto de perfil</label>
+                                {{ form.imagen_perfil|add_class:'form-control' }}
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-green">Guardar cambios</button>
+                            <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminarCuenta">Eliminar cuenta</a>
+                            <a href="#" class="btn btn-info">Generar reporte</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal de confirmación para eliminar cuenta -->
+<div class="modal fade" id="modalEliminarCuenta" tabindex="-1" aria-labelledby="modalEliminarCuentaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger" id="modalEliminarCuentaLabel">¿Eliminar cuenta?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.
+      </div>
+      <div class="modal-footer">
+        <form method="post" action="{% url 'usuarios:eliminar_cuenta' %}" id="formEliminarCuenta">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+        </form>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+const sidebar = document.getElementById('sidebar');
+sidebar.addEventListener('mouseenter', () => sidebar.classList.add('expanded'));
+sidebar.addEventListener('mouseleave', () => sidebar.classList.remove('expanded'));
+
+function generarReporte() {
+    // Lógica para generar reporte
+    alert('Generando reporte...');
+}
+
+function enviarCorreoMasivo() {
+    // Lógica para enviar correo masivo
+    alert('Enviando correo masivo...');
+}
+
+function validarPerfil() {
+    // Lógica para validar perfil
+    alert('Validando perfil...');
+}
+</script>
+{% endblock %} 

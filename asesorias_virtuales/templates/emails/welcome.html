@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #4a90e2;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 0 0 5px 5px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4a90e2;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>¡Bienvenido a Asesorías Virtuales!</h1>
+        </div>
+        <div class="content">
+            <p>Hola {{ user.get_full_name }},</p>
+            <p>Nos complace darte la bienvenida a nuestra plataforma de Asesorías Virtuales. Tu cuenta ha sido creada exitosamente como {{ role }}.</p>
+            <p>Con tu cuenta podrás:</p>
+            <ul>
+                {% if user.role == 'learner' %}
+                    <li>Acceder a tus grupos de estudio</li>
+                    <li>Participar en asesorías virtuales</li>
+                    <li>Comunicarte con tus asesores</li>
+                {% elif user.role == 'advisor' %}
+                    <li>Gestionar tus grupos de estudiantes</li>
+                    <li>Programar asesorías</li>
+                    <li>Compartir recursos educativos</li>
+                {% elif user.role == 'coordinator' %}
+                    <li>Gestionar grupos y asesores</li>
+                    <li>Monitorear el progreso de los estudiantes</li>
+                    <li>Administrar la plataforma</li>
+                {% endif %}
+            </ul>
+            <p>Para comenzar, inicia sesión en nuestra plataforma:</p>
+            <a href="{{ request.scheme }}://{{ request.get_host }}{% url 'usuarios:login' %}" class="button">Iniciar Sesión</a>
+            <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
+            <p>¡Bienvenido a nuestra comunidad educativa!</p>
+        </div>
+    </div>
+</body>
+</html> 

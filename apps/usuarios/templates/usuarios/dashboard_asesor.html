@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Dashboard Asesor | S&S Asesorías Virtuales{% endblock %}
+{% block content %}
+<!-- Botón para colapsar el menú en móvil -->
+<button class="btn btn-outline-primary d-md-none mb-2" id="toggleSidebar"><i class="fas fa-bars"></i></button>
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <img src="{% static 'img/logo_ss.png' %}" alt="Logo S&S" class="logo">
+    </div>
+    <ul class="sidebar-nav">
+        <li><a href="{% url 'usuarios:dashboard_asesor' %}" class="sidebar-link active"><i class="fas fa-home sidebar-icon"></i><span class="sidebar-label">Inicio</span></a></li>
+        <li><a href="{% url 'usuarios:perfil_asesor' %}" class="sidebar-link"><i class="fas fa-user sidebar-icon"></i><span class="sidebar-label">Perfil</span></a></li>
+        <li><a href="{% url 'usuarios:componentes_asesor' %}" class="sidebar-link"><i class="fas fa-puzzle-piece sidebar-icon"></i><span class="sidebar-label">Componentes</span></a></li>
+        <li><a href="{% url 'usuarios:grupos_asesor' %}" class="sidebar-link"><i class="fas fa-users sidebar-icon"></i><span class="sidebar-label">Grupos</span></a></li>
+        <li><a href="{% url 'usuarios:pruebas_asesor' %}" class="sidebar-link"><i class="fas fa-file-alt sidebar-icon"></i><span class="sidebar-label">Pruebas</span></a></li>
+        <li><a href="{% url 'usuarios:pqrs_asesor' %}" class="sidebar-link"><i class="fas fa-question-circle sidebar-icon"></i><span class="sidebar-label">PQRS</span></a></li>
+        <li><a href="{% url 'usuarios:notificaciones_asesor' %}" class="sidebar-link"><i class="fas fa-bell sidebar-icon"></i><span class="sidebar-label">Notificaciones</span>{% if notificaciones_no_leidas and notificaciones_no_leidas > 0 %}<span class="badge bg-danger ms-2">{{ notificaciones_no_leidas }}</span>{% endif %}</a></li>
+        <li><a href="{% url 'usuarios:reportes_asesor' %}" class="sidebar-link"><i class="fas fa-chart-bar sidebar-icon"></i><span class="sidebar-label">Reportes</span></a></li>
+    </ul>
+    <div class="sidebar-footer">
+        <a href="{% url 'usuarios:logout' %}" class="sidebar-link"><i class="fas fa-sign-out-alt sidebar-icon"></i><span class="sidebar-label">Cerrar sesión</span></a>
+    </div>
+</div>
+<div class="main-content">
+    <h2 class="mb-4" style="color:#1e3a8a; font-family:'Playfair Display',serif; font-style:italic;">Bienvenido, {{ user.first_name }} 👋</h2>
+    <!-- Widgets dinámicos -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-2">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-users fa-lg mb-1 text-primary"></i>
+                    <h6 class="mb-0">Grupos</h6>
+                    <span class="fw-bold">{{ total_grupos|default:'0' }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-2">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-user-graduate fa-lg mb-1 text-success"></i>
+                    <h6 class="mb-0">Aprendices</h6>
+                    <span class="fw-bold">{{ total_aprendices|default:'0' }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-2">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-file-alt fa-lg mb-1 text-warning"></i>
+                    <h6 class="mb-0">Pruebas</h6>
+                    <span class="fw-bold">{{ pruebas_creadas|default:'0' }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-2">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-hourglass-half fa-lg mb-1 text-secondary"></i>
+                    <h6 class="mb-0">Pruebas Pend.</h6>
+                    <span class="fw-bold">{{ pruebas_pendientes|default:'0' }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-2">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-question-circle fa-lg mb-1 text-danger"></i>
+                    <h6 class="mb-0">PQRS Pend.</h6>
+                    <span class="fw-bold">{{ pqrs_pendientes|default:'0' }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-2">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-bell fa-lg mb-1 text-info"></i>
+                    <h6 class="mb-0">Notif. No Leídas</h6>
+                    <span class="fw-bold">{{ notificaciones_no_leidas|default:'0' }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin widgets dinámicos -->
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <i class="fas fa-puzzle-piece fa-2x icon-green mb-2"></i>
+                <h5 class="mb-1">Componentes</h5>
+                <p class="mb-0">Gestiona tus componentes asignados.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <i class="fas fa-users fa-2x icon-green mb-2"></i>
+                <h5 class="mb-1">Grupos</h5>
+                <p class="mb-0">Administra tus grupos y aprendices.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <i class="fas fa-file-alt fa-2x icon-green mb-2"></i>
+                <h5 class="mb-1">Pruebas</h5>
+                <p class="mb-0">Crea, califica y gestiona pruebas.</p>
+            </div>
+        </div>
+    </div>
+    <div class="row g-4 mt-2">
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <i class="fas fa-question-circle fa-2x icon-green mb-2"></i>
+                <h5 class="mb-1">PQRS</h5>
+                <p class="mb-0">Responde y gestiona solicitudes.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <i class="fas fa-bell fa-2x icon-green mb-2"></i>
+                <h5 class="mb-1">Notificaciones</h5>
+                <p class="mb-0">Mantente informado de novedades.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <i class="fas fa-chart-bar fa-2x icon-green mb-2"></i>
+                <h5 class="mb-1">Reportes</h5>
+                <p class="mb-0">Visualiza reportes y estadísticas.</p>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3 class="mb-3" style="color:#1e3a8a; font-family:'Playfair Display',serif; font-style:italic;">Acciones Rápidas</h3>
+            <div class="d-flex gap-3">
+                <button class="btn btn-green" onclick="generarReporte()">Generar Reporte</button>
+                <button class="btn btn-green" onclick="enviarCorreoMasivo()">Enviar Correo Masivo</button>
+                <button class="btn btn-green" onclick="validarPrueba()">Validar Prueba</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+const sidebar = document.getElementById('sidebar');
+sidebar.addEventListener('mouseenter', () => sidebar.classList.add('expanded'));
+sidebar.addEventListener('mouseleave', () => sidebar.classList.remove('expanded'));
+
+// Sidebar móvil
+const toggleSidebar = document.getElementById('toggleSidebar');
+if (toggleSidebar) {
+    toggleSidebar.addEventListener('click', () => {
+        sidebar.classList.toggle('show');
+    });
+}
+
+function generarReporte() {
+    // Lógica para generar reporte
+    alert('Generando reporte...');
+}
+
+function enviarCorreoMasivo() {
+    // Lógica para enviar correo masivo
+    alert('Enviando correo masivo...');
+}
+
+function validarPrueba() {
+    // Lógica para validar prueba
+    alert('Validando prueba...');
+}
+</script>
+<style>
+/* Sidebar responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        left: -220px;
+        top: 0;
+        height: 100vh;
+        width: 220px;
+        background: #fff;
+        z-index: 1050;
+        transition: left 0.3s;
+    }
+    .sidebar.show {
+        left: 0;
+    }
+    .main-content {
+        margin-left: 0 !important;
+    }
+}
+</style>
+{% endblock %} 

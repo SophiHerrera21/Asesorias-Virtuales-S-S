@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Dashboard Aprendiz | S&S Asesorías Virtuales{% endblock %}
+{% block content %}
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <img src="{% static 'img/logo_ss.png' %}" alt="Logo S&S" class="logo">
+    </div>
+    <ul class="sidebar-nav">
+        <li><a href="{% url 'usuarios:dashboard_aprendiz' %}" class="sidebar-link active"><i class="fas fa-home sidebar-icon"></i><span class="sidebar-label">Inicio</span></a></li>
+        <li><a href="{% url 'usuarios:perfil_aprendiz' %}" class="sidebar-link"><i class="fas fa-user sidebar-icon"></i><span class="sidebar-label">Perfil</span></a></li>
+        <li><a href="{% url 'usuarios:componentes_aprendiz' %}" class="sidebar-link"><i class="fas fa-puzzle-piece sidebar-icon"></i><span class="sidebar-label">Componentes</span></a></li>
+        <li><a href="{% url 'usuarios:grupos_aprendiz' %}" class="sidebar-link"><i class="fas fa-users sidebar-icon"></i><span class="sidebar-label">Grupos</span></a></li>
+        <li><a href="{% url 'usuarios:pruebas_aprendiz' %}" class="sidebar-link"><i class="fas fa-file-alt sidebar-icon"></i><span class="sidebar-label">Pruebas</span></a></li>
+        <li><a href="{% url 'usuarios:pqrs_aprendiz' %}" class="sidebar-link"><i class="fas fa-question-circle sidebar-icon"></i><span class="sidebar-label">PQRS</span></a></li>
+        <li><a href="{% url 'usuarios:notificaciones_aprendiz' %}" class="sidebar-link"><i class="fas fa-bell sidebar-icon"></i><span class="sidebar-label">Notificaciones</span>{% if notificaciones_no_leidas and notificaciones_no_leidas > 0 %}<span class="badge bg-danger ms-2">{{ notificaciones_no_leidas }}</span>{% endif %}</a></li>
+        <li><a href="{% url 'usuarios:reportes_aprendiz' %}" class="sidebar-link"><i class="fas fa-chart-bar sidebar-icon"></i><span class="sidebar-label">Reportes</span></a></li>
+    </ul>
+    <div class="sidebar-footer">
+        <a href="{% url 'usuarios:logout' %}" class="sidebar-link"><i class="fas fa-sign-out-alt sidebar-icon"></i><span class="sidebar-label">Cerrar sesión</span></a>
+    </div>
+</div>
+<div class="main-content">
+    <h2 class="mb-4" style="color:#1e3a8a; font-family:'Playfair Display',serif; font-style:italic;">Bienvenido, {{ user.first_name }} 👋</h2>
+    <!-- Widgets dinámicos -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-2">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-puzzle-piece fa-lg mb-1 text-primary"></i>
+                    <h6 class="mb-0">Componentes</h6>
+                    <span class="fw-bold">{{ total_componentes|default:'0' }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-2">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-users fa-lg mb-1 text-success"></i>
+                    <h6 class="mb-0">Grupos</h6>
+                    <span class="fw-bold">{{ total_grupos|default:'0' }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-2">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-file-alt fa-lg mb-1 text-warning"></i>
+                    <h6 class="mb-0">Pruebas</h6>
+                    <span class="fw-bold">{{ pruebas_pendientes|default:'0' }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-2">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-question-circle fa-lg mb-1 text-danger"></i>
+                    <h6 class="mb-0">PQRS</h6>
+                    <span class="fw-bold">{{ pqrs_activas|default:'0' }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-2">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-bell fa-lg mb-1 text-info"></i>
+                    <h6 class="mb-0">Notif. No Leídas</h6>
+                    <span class="fw-bold">{{ notificaciones_no_leidas|default:'0' }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin widgets dinámicos -->
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <i class="fas fa-puzzle-piece fa-2x icon-green mb-2"></i>
+                <h5 class="mb-1">Componentes</h5>
+                <p class="mb-0">Selecciona y gestiona tus componentes.</p>
+                <a href="{% url 'usuarios:componentes_aprendiz' %}" class="btn btn-outline-success mt-3">Ver Componentes</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <i class="fas fa-users fa-2x icon-green mb-2"></i>
+                <h5 class="mb-1">Grupos</h5>
+                <p class="mb-0">Consulta tus grupos y compañeros.</p>
+                <a href="{% url 'usuarios:grupos_aprendiz' %}" class="btn btn-outline-success mt-3">Ver Grupos</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <i class="fas fa-file-alt fa-2x icon-green mb-2"></i>
+                <h5 class="mb-1">Pruebas</h5>
+                <p class="mb-0">Revisa y entrega tus pruebas asignadas.</p>
+                <a href="{% url 'usuarios:pruebas_aprendiz' %}" class="btn btn-outline-success mt-3">Ver Pruebas</a>
+            </div>
+        </div>
+    </div>
+    <div class="row g-4 mt-2">
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <i class="fas fa-question-circle fa-2x icon-green mb-2"></i>
+                <h5 class="mb-1">PQRS</h5>
+                <p class="mb-0">Realiza y consulta tus PQRS.</p>
+                <a href="{% url 'usuarios:pqrs_aprendiz' %}" class="btn btn-outline-success mt-3">Ver PQRS</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <i class="fas fa-bell fa-2x icon-green mb-2"></i>
+                <h5 class="mb-1">Notificaciones</h5>
+                <p class="mb-0">Mantente informado de novedades.</p>
+                <a href="{% url 'usuarios:notificaciones_aprendiz' %}" class="btn btn-outline-success mt-3">Ver Notificaciones</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <i class="fas fa-chart-bar fa-2x icon-green mb-2"></i>
+                <h5 class="mb-1">Reportes</h5>
+                <p class="mb-0">Visualiza tu progreso académico.</p>
+                <a href="{% url 'usuarios:reportes_aprendiz' %}" class="btn btn-outline-success mt-3">Ver Reportes</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: #1e3a8a;
+    color: white;
+    transition: all 0.3s;
+    z-index: 1000;
+}
+
+.sidebar.expanded {
+    width: 250px;
+}
+
+.sidebar-header {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.sidebar-link:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+
+.sidebar-link.active {
+    background: rgba(255,255,255,0.2);
+}
+
+.sidebar-icon {
+    width: 20px;
+    margin-right: 10px;
+}
+
+.sidebar-label {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+}
+
+.icon-green {
+    color: #2ecc40;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px;
+    }
+    
+    .sidebar.expanded {
+        width: 250px;
+    }
+    
+    .sidebar-label {
+        display: none;
+    }
+    
+    .sidebar.expanded .sidebar-label {
+        display: inline;
+    }
+    
+    .main-content {
+        margin-left: 60px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.getElementById('sidebar');
+    
+    // Expandir sidebar al hacer hover
+    sidebar.addEventListener('mouseenter', () => {
+        sidebar.classList.add('expanded');
+    });
+    
+    sidebar.addEventListener('mouseleave', () => {
+        sidebar.classList.remove('expanded');
+    });
+    
+    // Toggle sidebar en móvil
+    const toggleBtn = document.getElementById('toggleSidebar');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('expanded');
+        });
+    }
+});
+</script>
+{% endblock %} 
