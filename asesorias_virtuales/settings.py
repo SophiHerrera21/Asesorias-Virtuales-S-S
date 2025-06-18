@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
+import pymysql
+pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -90,15 +92,14 @@ WSGI_APPLICATION = 'asesorias_virtuales.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'asesorias_virtuales_nueva',
+        'NAME': 'asesorias',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'Dartsarm7209',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            'charset': 'utf8mb4',
-        }
+        },
     }
 }
 
@@ -160,7 +161,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'ssasesoras430@gmail.com'
-EMAIL_HOST_PASSWORD = 'ekjm ybtt zeyl vpqs'
+EMAIL_HOST_PASSWORD = 'ekjmybttzeylvpqs'
 DEFAULT_FROM_EMAIL = 'S&S Asesoras Virtuales <ssasesoras430@gmail.com>'
 
 # Authentication settings
@@ -179,7 +180,8 @@ SITE_ID = 1
 # Configuración actualizada de django-allauth
 ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_REQUIRED = False # cambiar luego a True si se requiere verificación de email
+ACCOUNT_EMAIL_VERIFICATION = "none" # Cambiar luego a "mandatory" si se requiere verificación de email
 ACCOUNT_UNIQUE_EMAIL = True
 
 # Authentication settings
